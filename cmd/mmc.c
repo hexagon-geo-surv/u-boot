@@ -895,6 +895,42 @@ static int mmc_partconf_print(struct mmc *mmc, const char *varname)
 	return CMD_RET_SUCCESS;
 }
 
+static int do_mmc_partboot(struct cmd_tbl *cmdtp, int flag,
+			   int argc, char *const argv[])
+{
+	int dev;
+	struct mmc *mmc;
+	u8 boot, part;
+
+	if (argc != 3)
+		return CMD_RET_USAGE;
+
+	dev = simple_strtoul(argv[1], NULL, 10);
+	boot = simple_strtoul(argv[2], NULL, 10);
+
+	mmc = init_mmc_device(dev, false);
+	if (!mmc)
+		return CMD_RET_FAILURE;
+
+	if (IS_SD(mmc)) {
+		puts("PARTITION_CONFIG only exists on eMMC\n");
+		return CMD_RET_FAILURE;
+	}
+
+	if (mmc->part_config == MMCPART_NOAVAILABLE) {
+		printf("No part_config info for ver. 0x%x\n", mmc->version);
+		return CMD_RET_FAILURE;
+	}
+
+	part = EXT_CSD_EXTRACT_BOOT_PART(mmc->part_config);
+
+	if (part == boot) {
+		return CMD_RET_SUCCESS;
+	} else {
+		return CMD_RET_FAILURE;
+	}
+}
+
 static int do_mmc_partconf(struct cmd_tbl *cmdtp, int flag,
 			   int argc, char *const argv[])
 {
@@ -1057,6 +1093,7 @@ static struct cmd_tbl cmd_mmc[] = {
 	U_BOOT_CMD_MKENT(bootbus, 5, 0, do_mmc_bootbus, "", ""),
 	U_BOOT_CMD_MKENT(bootpart-resize, 4, 0, do_mmc_boot_resize, "", ""),
 	U_BOOT_CMD_MKENT(partconf, 5, 0, do_mmc_partconf, "", ""),
+	U_BOOT_CMD_MKENT(partboot, 3, 0, do_mmc_partboot, "", ""),
 	U_BOOT_CMD_MKENT(rst-function, 3, 0, do_mmc_rst_func, "", ""),
 #endif
 #if CONFIG_IS_ENABLED(CMD_MMC_RPMB)
@@ -1133,6 +1170,8 @@ U_BOOT_CMD(
 	"mmc partconf <dev> [[varname] | [<boot_ack> <boot_partition> <partition_access>]]\n"
 	" - Show or change the bits of the PARTITION_CONFIG field of the specified device\n"
 	"   If showing the bits, optionally store the boot_partition field into varname\n"
+	"mmc partboot dev boot_partition\n"
+	" - Return true if given boot_partition is specified in PARTITION_CONFIG, otherwise false\n"
 	"mmc rst-function <dev> <value>\n"
 	" - Change the RST_n_FUNCTION field of the specified device\n"
 	"   WARNING: This is a write-once field and 0 / 1 / 2 are the only valid values.\n"
