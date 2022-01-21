@@ -1,0 +1,15 @@
+if TARGET_IMX8MM_LEICA_CROCODILE
+
+config SYS_BOARD
+	default "crocodile"
+
+config SYS_VENDOR
+	default "leica"
+
+config SYS_CONFIG_NAME
+	default "crocodile"
+
+config IMX_CONFIG
+	default "board/leica/crocodile/imximage-8mm-lpddr4.cfg"
+
+endif
