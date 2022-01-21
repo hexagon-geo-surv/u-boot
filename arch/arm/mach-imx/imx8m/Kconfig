@@ -256,6 +256,13 @@ config TARGET_IMX8MM_CL_IOT_GATE_OPTEE
 	select IMX8M_LPDDR4
 	select SUPPORT_EXTENSION_SCAN
 
+config TARGET_IMX8MM_LEICA_CROCODILE
+	bool "Leica Crocodile (GS05) board"
+	select BINMAN
+	select IMX8MM
+	select SUPPORT_SPL
+	select IMX8M_LPDDR4
+
 config TARGET_IMX8MP_RSB3720A1_4G
 	bool "Support i.MX8MP RSB3720A1 4G"
 	select BINMAN
@@ -295,6 +302,7 @@ source "board/gateworks/venice/Kconfig"
 source "board/google/imx8mq_phanbell/Kconfig"
 source "board/kontron/pitx_imx8m/Kconfig"
 source "board/kontron/sl-mx8mm/Kconfig"
+source "board/leica/crocodile/Kconfig"
 source "board/menlo/mx8menlo/Kconfig"
 source "board/phytec/phycore_imx8mm/Kconfig"
 source "board/phytec/phycore_imx8mp/Kconfig"
