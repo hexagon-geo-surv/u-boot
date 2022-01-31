@@ -33,29 +33,35 @@
 
 #endif
 
-#ifndef CONFIG_SPL_BUILD
-#define BOOT_TARGET_DEVICES(func) \
-	func(MMC, mmc, 1) \
-	func(MMC, mmc, 2) \
-	func(DHCP, dhcp, na)
-
-#include <config_distro_bootcmd.h>
-#endif
-
 /* Initial environment variables */
-#define CONFIG_EXTRA_ENV_SETTINGS		\
-	BOOTENV \
-	"scriptaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
-	"kernel_addr_r=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
-	"image=Image\0" \
+#define CONFIG_EXTRA_ENV_SETTINGS \
 	"console=ttymxc2,115200\0" \
-	"fdt_addr_r=0x43000000\0"			\
-	"boot_fit=no\0" \
-	"fdtfile=crocodile.dtb\0" \
-	"initrd_addr=0x43800000\0"		\
+	"initrd_addr=0x43800000\0" \
+	"loadaddr=0x40480000\0"    \
+	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
 	"bootm_size=0x10000000\0" \
-	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
-	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
+	"loadbootscript="\
+		"if mmc partboot ${mmcdev} 1; then " \
+			"echo Loading 4KiB bootscript from boot0 +25KiB; " \
+			"mmc dev ${mmcdev} 1; " \
+		"elif mmc partboot ${mmcdev} 2; then " \
+			"echo Loading 4KiB bootscript from boot1 +25KiB; " \
+			"mmc dev ${mmcdev} 2; " \
+		"else " \
+			"echo Loading 4KiB bootscript from user partition +25KiB; " \
+		"fi; " \
+		"mmc read ${loadaddr} 32 8;" \
+		"mmc dev ${mmcdev};\0" \
+	"bootscript=echo Running bootscript from mmc ...; " \
+		"source\0" \
+
+#define CONFIG_BOOTCOMMAND \
+	"mmc dev ${mmcdev}; "\
+	"if mmc rescan; then " \
+		"if run loadbootscript && run bootscript; then " \
+			"echo Bootscript finished; " \
+		"fi; " \
+	"fi;"
 
 /* Link Definitions */
 
