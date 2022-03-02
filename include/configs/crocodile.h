@@ -46,10 +46,11 @@
 	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
 	"bootm_size=0x10000000\0" \
 	"loadbootscript="\
-		"if mmc partboot ${mmcdev} 1; then " \
+		"mmc partconf ${mmcdev} boot_partition; " \
+		"if test \"${boot_partition}\" = \"1\"; then " \
 			"echo Loading 4KiB bootscript from boot0 +25KiB; " \
 			"mmc dev ${mmcdev} 1; " \
-		"elif mmc partboot ${mmcdev} 2; then " \
+		"elif test \"${boot_partition}\" = \"2\"; then " \
 			"echo Loading 4KiB bootscript from boot1 +25KiB; " \
 			"mmc dev ${mmcdev} 2; " \
 		"else " \
