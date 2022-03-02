@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Copyright 2019 NXP
+ */
+
+#include "crocodile-u-boot.dtsi"
+
+&binman {
+	/delete-node/ imx-boot;
+
+	imx-boot-fspi {
+		filename = "flash.bin";
+		pad-byte = <0x00>;
+		
+		fspi_conf_block {
+			filename = "board/leica/crocodile/fspi_conf.bin";
+			offset = <0x00>;
+			type = "blob-ext";
+		};
+
+		spl {
+			filename = "spl.bin";
+			offset = <0x1000>;
+			type = "blob-ext";
+		};
+
+		binman_uboot: uboot {
+			filename = "u-boot.itb";
+			offset = <0x58C00>;
+			type = "blob-ext";
+		};
+	};
+};
