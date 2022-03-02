@@ -888,6 +888,7 @@ dtb-$(CONFIG_ARCH_IMX8ULP) += \
 
 dtb-$(CONFIG_ARCH_IMX8M) += \
 	crocodile.dtb \
+	crocodile-fspi.dtb \
 	imx8mm-evk.dtb \
 	imx8mm-icore-mx8mm-ctouch2.dtb \
 	imx8mm-icore-mx8mm-edimm2.2.dtb \
