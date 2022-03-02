@@ -5,3 +5,4 @@ F:	arch/arm/dts/crocodile*
 F:	board/leica/crocodile/
 F:	include/configs/crocodile.h
 F:	configs/crocodile_defconfig
+F:	configs/crocodile_fspi_defconfig
