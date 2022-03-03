@@ -11,6 +11,14 @@ config SYS_CONFIG_NAME
 
 config IMX_CONFIG
 	default "board/leica/crocodile/imximage-8mm-lpddr4.cfg"
+	
+config LEICA_FSPI_NOR_IMG_ADDR
+	hex "Address of image to be booted from NOR flash in bytes"
+	default 0x200000
+
+config LEICA_FSPI_NOR_IMG_SIZE
+	hex "Size of image to be booted from NOR flash in bytes"
+	default 0x1600000
 
 config LEICA_BOOTSCRIPT_EMMC_ADDR
 	hex "Bootscript address in blocks on eMMC"

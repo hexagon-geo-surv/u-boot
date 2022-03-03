@@ -61,7 +61,13 @@
 		"mmc read ${loadaddr} ${bootscr_addr_blk} ${bootscr_size_blk};" \
 		"mmc dev ${mmcdev};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
-		"source\0"
+		"source\0" \
+	"bootqspi=echo Booting from qspi ...;" \
+		"nor_img_addr="__stringify(CONFIG_LEICA_FSPI_NOR_IMG_ADDR)"; " \
+		"nor_img_size="__stringify(CONFIG_LEICA_FSPI_NOR_IMG_SIZE)"; " \
+		"sf probe; "\
+		"sf read ${initrd_addr} ${nor_img_addr} ${nor_img_size}; "\
+		"bootm ${initrd_addr};\0"
 
 #define CONFIG_BOOTCOMMAND \
 	"mmc dev ${mmcdev}; "\
