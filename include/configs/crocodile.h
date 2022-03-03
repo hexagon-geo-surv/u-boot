@@ -69,6 +69,7 @@
 		"sf read ${initrd_addr} ${nor_img_addr} ${nor_img_size}; "\
 		"bootm ${initrd_addr};\0"
 
+#ifndef CONFIG_LEICA_FSPI_NOR_BOOTFLOW
 #define CONFIG_BOOTCOMMAND \
 	"mmc dev ${mmcdev}; "\
 	"if mmc rescan; then " \
@@ -76,6 +77,10 @@
 			"echo Bootscript finished; " \
 		"fi; " \
 	"fi;"
+#else
+#define CONFIG_BOOTCOMMAND \
+	"run bootqspi;"
+#endif
 
 /* Link Definitions */
 
