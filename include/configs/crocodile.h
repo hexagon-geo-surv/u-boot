@@ -44,22 +44,24 @@
 	"initrd_addr=0x43800000\0" \
 	"loadaddr=0x40480000\0"    \
 	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
+	"bootscr_addr_blk="__stringify(CONFIG_LEICA_BOOTSCRIPT_EMMC_ADDR)"\0" \
+	"bootscr_size_blk="__stringify(CONFIG_LEICA_BOOTSCRIPT_EMMC_SIZE)"\0" \
 	"bootm_size=0x10000000\0" \
 	"loadbootscript="\
 		"mmc partconf ${mmcdev} boot_partition; " \
 		"if test \"${boot_partition}\" = \"1\"; then " \
-			"echo Loading 4KiB bootscript from boot0 +25KiB; " \
+			"echo Loading bootscript from boot0; " \
 			"mmc dev ${mmcdev} 1; " \
 		"elif test \"${boot_partition}\" = \"2\"; then " \
-			"echo Loading 4KiB bootscript from boot1 +25KiB; " \
+			"echo Loading bootscript from boot1; " \
 			"mmc dev ${mmcdev} 2; " \
 		"else " \
-			"echo Loading 4KiB bootscript from user partition +25KiB; " \
+			"echo Loading bootscript from user partition; " \
 		"fi; " \
-		"mmc read ${loadaddr} 32 8;" \
+		"mmc read ${loadaddr} ${bootscr_addr_blk} ${bootscr_size_blk};" \
 		"mmc dev ${mmcdev};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
-		"source\0" \
+		"source\0"
 
 #define CONFIG_BOOTCOMMAND \
 	"mmc dev ${mmcdev}; "\

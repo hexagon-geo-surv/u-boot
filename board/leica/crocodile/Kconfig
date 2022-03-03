@@ -12,4 +12,16 @@ config SYS_CONFIG_NAME
 config IMX_CONFIG
 	default "board/leica/crocodile/imximage-8mm-lpddr4.cfg"
 
+config LEICA_BOOTSCRIPT_EMMC_ADDR
+	hex "Bootscript address in blocks on eMMC"
+	default 0x32
+	help
+	  Address in blocks on eMMC bootscript is loaded from.
+
+config LEICA_BOOTSCRIPT_EMMC_SIZE
+	hex "Bootscript size in blocks on eMMC"
+	default 0x8
+	help
+	  Size in blocks of bootscript on eMMC.
+
 endif
