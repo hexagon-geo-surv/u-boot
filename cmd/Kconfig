@@ -262,6 +262,12 @@ config BOOTM_VXWORKS
 	help
 	  Support booting VxWorks images via the bootm command.
 
+config CMD_BOOTMAP
+	bool "bootmap"
+	help
+	  Add address and size of Leica System 1600 bootmap to environment based
+	  on boot-map switch.
+
 config CMD_BOOTEFI
 	bool "bootefi"
 	depends on EFI_LOADER
