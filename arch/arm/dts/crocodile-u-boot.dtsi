@@ -68,10 +68,6 @@
 	u-boot,dm-spl;
 };
 
-&usdhc1 {
-	u-boot,dm-spl;
-};
-
 &usdhc2 {
 	u-boot,dm-spl;
 	sd-uhs-sdr104;
