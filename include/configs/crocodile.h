@@ -65,7 +65,8 @@
 		"nor_img_size="__stringify(CONFIG_LEICA_FSPI_NOR_IMG_SIZE)"; " \
 		"sf probe; "\
 		"sf read ${initrd_addr} ${nor_img_addr} ${nor_img_size}; "\
-		"bootm ${initrd_addr};\0"
+		"bootm ${initrd_addr};\0" \
+	"swu=1\0" \
 
 #ifndef CONFIG_LEICA_FSPI_NOR_BOOTFLOW
 #define CONFIG_BOOTCOMMAND \
