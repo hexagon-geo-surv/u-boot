@@ -45,6 +45,7 @@
 	"bootscr_addr_blk="__stringify(CONFIG_LEICA_BOOTSCRIPT_EMMC_ADDR)"\0" \
 	"bootscr_size_blk="__stringify(CONFIG_LEICA_BOOTSCRIPT_EMMC_SIZE)"\0" \
 	"bootm_size=0x10000000\0" \
+	"board_id_addr=0x206\0" \
 	"loadbootscript="\
 		"mmc partconf ${mmcdev} boot_partition; " \
 		"if test \"${boot_partition}\" = \"1\"; then " \
@@ -63,9 +64,17 @@
 	"bootqspi=echo Booting from qspi ...;" \
 		"nor_img_addr="__stringify(CONFIG_LEICA_FSPI_NOR_IMG_ADDR)"; " \
 		"nor_img_size="__stringify(CONFIG_LEICA_FSPI_NOR_IMG_SIZE)"; " \
-		"sf probe; "\
 		"sf read ${initrd_addr} ${nor_img_addr} ${nor_img_size}; "\
-		"bootm ${initrd_addr};\0" \
+		"bootm ${initrd_addr}#${fit_config};\0" \
+	"get_fit_config=sf probe;" \
+		"mw.l ${loadaddr} 0x0 0x1;" \
+		"sf read ${loadaddr} ${board_id_addr} 0x1;" \
+		"env set fit_config conf-freescale_crocodile-pt1.dtb;" \
+		"if itest.s *${loadaddr} -eq A; then" \
+		"    echo \"Board A - select config conf-freescale_crocodile-pt1.dtb\";" \
+		"else" \
+		"    echo \"Board ID unknown - falling back to default config conf-freescale_crocodile-pt1.dtb\";" \
+		"fi;\0" \
 	"swu=1\0" \
 
 #ifndef CONFIG_LEICA_FSPI_NOR_BOOTFLOW
@@ -78,6 +87,7 @@
 	"fi;"
 #else
 #define CONFIG_BOOTCOMMAND \
+	"run get_fit_config;" \
 	"run bootqspi;"
 #endif
 
