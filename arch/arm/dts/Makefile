@@ -939,6 +939,7 @@ dtb-$(CONFIG_ARCH_IMX8ULP) += \
 	imx8ulp-evk.dtb
 
 dtb-$(CONFIG_ARCH_IMX8M) += \
+	beluga.dtb \
 	crocodile.dtb \
 	crocodile-fspi.dtb \
 	imx8mm-data-modul-edm-sbc.dtb \
