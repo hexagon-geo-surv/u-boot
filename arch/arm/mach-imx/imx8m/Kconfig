@@ -255,6 +255,16 @@ config TARGET_IMX8MM_CL_IOT_GATE_OPTEE
 	select IMX8M_LPDDR4
 	select SUPPORT_EXTENSION_SCAN
 
+config TARGET_IMX8MP_LEICA_BELUGA
+	bool "Leica Beluga (TS20) board"
+	select BINMAN
+	select IMX8MP
+	select SUPPORT_SPL
+	select IMX8M_LPDDR4
+	select FSL_CAAM
+	select ARCH_MISC_INIT
+	select SPL_CRYPTO if SPL
+
 config TARGET_IMX8MM_LEICA_CROCODILE
 	bool "Leica Crocodile (GS05) board"
 	select BINMAN
@@ -275,6 +285,7 @@ config TARGET_IMX8MP_RSB3720A1_6G
 	select IMX8MP
 	select SUPPORT_SPL
 	select IMX8M_LPDDR4
+
 endchoice
 
 source "board/advantech/imx8mp_rsb3720a1/Kconfig"
@@ -293,6 +304,7 @@ source "board/gateworks/venice/Kconfig"
 source "board/google/imx8mq_phanbell/Kconfig"
 source "board/kontron/pitx_imx8m/Kconfig"
 source "board/kontron/sl-mx8mm/Kconfig"
+source "board/leica/beluga/Kconfig"
 source "board/leica/crocodile/Kconfig"
 source "board/menlo/mx8menlo/Kconfig"
 source "board/phytec/phycore_imx8mm/Kconfig"

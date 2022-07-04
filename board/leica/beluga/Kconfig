@@ -1,0 +1,16 @@
+if TARGET_IMX8MP_LEICA_BELUGA
+
+config SYS_BOARD
+	default "beluga"
+
+config SYS_VENDOR
+	default "leica"
+
+config SYS_CONFIG_NAME
+	default "beluga"
+
+config IMX_CONFIG
+	default "board/leica/beluga/imximage-8mp-lpddr4.cfg"
+
+
+endif

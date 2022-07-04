@@ -1,0 +1,7 @@
+BELUGA (TS20) BOARD
+M:	Leica BSP Team <bsp-development.geo@leica-geosystems.com>
+S:	Maintained
+F:	arch/arm/dts/beluga*
+F:	board/leica/beluga/
+F:	include/configs/beluga.h
+F:	configs/beluga_defconfig
