@@ -115,11 +115,6 @@
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + \
 					sizeof(CONFIG_SYS_PROMPT) + 16)
 
-/* USDHC */
-
-#define CONFIG_SYS_FSL_USDHC_NUM	2
-#define CONFIG_SYS_FSL_ESDHC_ADDR	0
-
 #define CONFIG_ETHPRIME                 "FEC"
 
 #define CONFIG_FEC_MXC_PHYADDR          0
