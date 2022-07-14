@@ -40,28 +40,39 @@
 
 #endif
 
-#ifndef CONFIG_SPL_BUILD
-#define BOOT_TARGET_DEVICES(func) \
-       func(MMC, mmc, 1) \
-       func(MMC, mmc, 2)
-
-#include <config_distro_bootcmd.h>
-#endif
-
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS		\
-	BOOTENV \
 	"scriptaddr=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
-	"kernel_addr_r=" __stringify(CONFIG_SYS_LOAD_ADDR) "\0" \
-	"image=Image\0" \
 	"console=ttymxc1,115200 earlycon=ec_imx6q,0x30890000,115200\0" \
-	"fdt_addr_r=0x43000000\0"			\
-	"boot_fdt=try\0" \
-	"fdtfile=" CONFIG_DEFAULT_FDT_FILE "\0" \
 	"initrd_addr=0x43800000\0"		\
 	"bootm_size=0x10000000\0" \
-	"mmcpart=1\0" \
-	"mmcroot=/dev/mmcblk1p2 rootwait rw\0" \
+	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
+	"bootscr_addr_blk="__stringify(CONFIG_LEICA_BOOTSCRIPT_EMMC_ADDR)"\0" \
+	"bootscr_size_blk="__stringify(CONFIG_LEICA_BOOTSCRIPT_EMMC_SIZE)"\0" \
+	"loadbootscript=" \
+		"mmc partconf ${mmcdev} boot_partition; " \
+		"if test \"${boot_partition}\" = \"1\"; then " \
+			"echo Loading bootscript from boot0; " \
+			"mmc dev ${mmcdev} 1; " \
+		"elif test \"${boot_partition}\" = \"2\"; then " \
+			"echo Loading bootscript from boot1; " \
+			"mmc dev ${mmcdev} 2; " \
+		"else " \
+			"echo Loading bootscript from user partition; " \
+		"fi; " \
+		"mmc read ${scriptaddr} ${bootscr_addr_blk} ${bootscr_size_blk};" \
+		"mmc dev ${mmcdev};\0" \
+	"bootscript=echo Running bootscript from mmc ...; " \
+		"source\0" \
+	"swu=1\0"
+
+#define CONFIG_BOOTCOMMAND \
+	"mmc dev ${mmcdev}; "\
+	"if mmc rescan; then " \
+		"if run loadbootscript && run bootscript; then " \
+			"echo Bootscript finished; " \
+		"fi; " \
+	"fi;"
 
 /* Link Definitions */
 
