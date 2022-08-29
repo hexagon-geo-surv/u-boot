@@ -69,11 +69,11 @@
 	"get_fit_config=sf probe;" \
 		"mw.l ${loadaddr} 0x0 0x1;" \
 		"sf read ${loadaddr} ${board_id_addr} 0x1;" \
-		"env set fit_config conf-freescale_crocodile-pt1.dtb;" \
+		"env set fit_config conf-freescale_crocodile-rev-b.dtb;" \
 		"if itest.s *${loadaddr} -eq A; then" \
-		"    echo \"Board A - select config conf-freescale_crocodile-pt1.dtb\";" \
+		"    echo \"Board A - select config conf-freescale_crocodile-rev-b.dtb\";" \
 		"else" \
-		"    echo \"Board ID unknown - falling back to default config conf-freescale_crocodile-pt1.dtb\";" \
+		"    echo \"Board ID unknown - falling back to default config conf-freescale_crocodile-rev-b.dtb\";" \
 		"fi;\0" \
 	"swu=1\0" \
 
