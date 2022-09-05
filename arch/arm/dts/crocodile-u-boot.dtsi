@@ -68,6 +68,11 @@
 	u-boot,dm-spl;
 };
 
+&uart4 {
+	// marker for common/leica_sep.c to find the device-node by
+	leica-MCU-uart;
+};
+
 &crypto {
 	u-boot,dm-spl;
 };

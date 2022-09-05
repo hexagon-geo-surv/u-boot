@@ -1933,6 +1933,14 @@ config CMD_KASLRSEED
 	  Set the kaslr-seed in the chosen node with entropy provided by a
 	  hardware random number generator.
 
+config CMD_LEICA_SEP
+	bool "leica SEP query utility"
+	select LEICA_SEP_COMMON
+	help
+	  query the MCU over uart for various informations, do
+	  configuration and much more - depending on the
+	  implemented/supported set of commands in its running firmware.
+
 config CMD_SLEEP
 	bool "sleep"
 	default y

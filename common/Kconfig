@@ -986,3 +986,11 @@ config FDT_SIMPLEFB
 	  These functions can be used by board to indicate to the OS
 	  the presence of the simple frame buffer with associated reserved
 	  memory
+
+config LEICA_SEP_COMMON
+	bool
+	help
+	  common functionality for SEP commands; that allow to
+	  query the MCU over uart for various informations, do
+	  configuration and much more - depending on the
+	  implemented/supported set of commands in its running firmware.

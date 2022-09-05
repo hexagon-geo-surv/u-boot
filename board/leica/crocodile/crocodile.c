@@ -61,8 +61,17 @@ int board_mmc_get_env_dev(int devno)
 int board_late_init(void)
 {
 #ifdef CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
-	env_set("board_name", "GS05");
-	env_set("board_rev", "PT1");
+	char board_name[16] = "GS05";
+	char board_rev[8] = "PT1";
+#if 0
+	//TODO#    ifdef CONFIG_LEICA_SEP_COMMON
+	//TODO: use "real" commands when they are implemented
+	//      (instead of "SC10" which, reports the MCU version)
+	leica_sep_sep_transfer("SC10:", board_name, sizeof(board_name));
+	leica_sep_sep_transfer("SC10:", board_rev, sizeof(board_rev));
+#endif
+	env_set("board_name", board_name);
+	env_set("board_rev", board_rev);
 #endif
 	return 0;
 }

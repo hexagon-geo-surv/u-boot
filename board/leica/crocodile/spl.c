@@ -9,6 +9,7 @@
 #include <hang.h>
 #include <image.h>
 #include <init.h>
+#include <leica_sep.h>
 #include <log.h>
 #include <spl.h>
 #include <asm/global_data.h>
@@ -67,9 +68,19 @@ void spl_board_init(void)
 #ifdef CONFIG_SPL_LOAD_FIT
 int board_fit_config_name_match(const char *name)
 {
-	/* Just empty function now - can't decide what to choose */
-	debug("%s: %s\n", __func__, name);
+	char *board_name = "crocodile";
+	char *board_rev = "unknown";
+        /* //TODO: doing SEP commands in/from the SPL... is no good idea = hangs/crashes
+#    ifdef CONFIG_LEICA_SEP_COMMON
+	leica_sep_sep_transfer("SC10:", board_name, sizeof(board_name));
+	leica_sep_sep_transfer("SC10:", board_rev, sizeof(board_rev));
+#    endif
+        */
 
+	/* Just empty function now - can't decide what to choose */
+	printf("%s: name= %s, board id= %s, rev= %s\n", __func__, name, board_name, board_rev);
+
+	//TODO do something with board_name/_id
 	return 0;
 }
 #endif
