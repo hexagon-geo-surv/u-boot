@@ -14,6 +14,10 @@
 #include <asm/arch/sys_proto.h>
 #include <asm/io.h>
 
+#ifdef CONFIG_LEICA_SEP_COMMON
+#include <leica_sep.h>
+#endif
+
 DECLARE_GLOBAL_DATA_PTR;
 
 #if IS_ENABLED(CONFIG_FEC_MXC)
@@ -63,13 +67,15 @@ int board_late_init(void)
 #ifdef CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
 	char board_name[16] = "GS05";
 	char board_rev[8] = "PT1";
-#if 0
-	//TODO#    ifdef CONFIG_LEICA_SEP_COMMON
+#    ifdef CONFIG_LEICA_SEP_COMMON
 	//TODO: use "real" commands when they are implemented
-	//      (instead of "SC10" which, reports the MCU version)
-	leica_sep_sep_transfer("SC10:", board_name, sizeof(board_name));
-	leica_sep_sep_transfer("SC10:", board_rev, sizeof(board_rev));
-#endif
+	//	(instead of "SC10" which, reports the MCU version)
+	struct udevice **udev;
+
+	leica_sep_init(udev);
+	leica_sep_transfer(udev, "SC10:", &board_name, sizeof(board_name), SEP_RESPONSE_TIMEOUT_MS);
+	leica_sep_transfer(udev, "SC10:", &board_rev, sizeof(board_rev), SEP_RESPONSE_TIMEOUT_MS);
+#    endif
 	env_set("board_name", board_name);
 	env_set("board_rev", board_rev);
 #endif

@@ -12,11 +12,21 @@
 #include <asm/arch/imx8mm_pins.h>
 
 
+/*
+ * global/"singleton" to do the uart initialization on demand and
+ * exactly once - even across multiple calls/callers in one session
+ */
+static struct udevice **leica_sep_udevice;
+
+
+/*
+ * commandline argument handeling wrapper around
+ * 'leica_sep_init' and 'leica_sep_transfer'
+ */
 static int do_leica_sep(struct cmd_tbl *cmdtp, int flag, int argc,
                         char * const argv[])
 {
     int ret = 0;
-    struct udevice *dev;
     char* command;
     char data[SEP_RESPONSE_LENGTH];
     bool verbose = false;
@@ -34,15 +44,24 @@ static int do_leica_sep(struct cmd_tbl *cmdtp, int flag, int argc,
         command = argv[2];
     }
 
-    ret = leica_sep_init(&dev);
-    if (ret) {
-        log_err("%s: unable to initialize serial driver used for SEP command\n", __FUNCTION__);
-        return -ENOTTY;
+    /*
+     *NOTE: there is no "udevice (pointer) valid"; only burried in other
+     * functions like ofnode_get_name... which returns NULL should the
+     * udevice pointer be uninitialized; abusing that to implement a
+     * "do once only" setup = set baudrate, software reset, ...
+     */
+    if (NULL == dev_read_name(*leica_sep_udevice)) {
+        ret = leica_sep_init(leica_sep_udevice);
+        if (ret) {
+            log_err("%s: unable to initialize serial driver used for SEP command\n", __FUNCTION__);
+            return -ENOTTY;
+        }
     }
 
-    ret = leica_sep_transfer(command,
+    ret = leica_sep_transfer(leica_sep_udevice,
+                             command,
                              data, sizeof(data),
-                             200);
+                             SEP_RESPONSE_TIMEOUT_MS);
 
     if (verbose)
         printf("SEP command = %s: ", command);

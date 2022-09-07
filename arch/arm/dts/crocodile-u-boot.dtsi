@@ -69,8 +69,11 @@
 };
 
 &uart4 {
+	// present in SPL
+	//u-boot,dm-spl; // leads to hanging SPL... why?
 	// marker for common/leica_sep.c to find the device-node by
-	leica-MCU-uart;
+	leica,MCU-uart;
+	leica,MCU-uart-baudrate = <19200>;
 };
 
 &crypto {

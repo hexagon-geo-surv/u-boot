@@ -9,7 +9,9 @@
 #include <hang.h>
 #include <image.h>
 #include <init.h>
+#ifdef CONFIG_LEICA_SEP_COMMON
 #include <leica_sep.h>
+#endif
 #include <log.h>
 #include <spl.h>
 #include <asm/global_data.h>
@@ -70,12 +72,17 @@ int board_fit_config_name_match(const char *name)
 {
 	char *board_name = "crocodile";
 	char *board_rev = "unknown";
-        /* //TODO: doing SEP commands in/from the SPL... is no good idea = hangs/crashes
-#    ifdef CONFIG_LEICA_SEP_COMMON
-	leica_sep_sep_transfer("SC10:", board_name, sizeof(board_name));
-	leica_sep_sep_transfer("SC10:", board_rev, sizeof(board_rev));
-#    endif
-        */
+
+	//* //TODO: in the SPL uart4 is not available in the DT, since setting 'u-boot,dm-spl' in the device not leads to a hangup during boot ... why?
+        //RFC: is this a usecase? or would it be sufficient to do all SEP communication later = in uboot-proper?
+#	ifdef CONFIG_LEICA_SEP_COMMON
+	struct udevice **udev;
+	if (0 <= leica_sep_init(udev)) {
+            leica_sep_transfer(udev, "SC10:", board_name, sizeof(board_name), SEP_RESPONSE_TIMEOUT_MS);
+            leica_sep_transfer(udev, "SC10:", board_rev, sizeof(board_rev), SEP_RESPONSE_TIMEOUT_MS);
+        }
+#	endif // CONFIG_LEICA_SEP_COMMON
+	//*/
 
 	/* Just empty function now - can't decide what to choose */
 	printf("%s: name= %s, board id= %s, rev= %s\n", __func__, name, board_name, board_rev);
