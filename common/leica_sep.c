@@ -24,6 +24,7 @@ int leica_sep_init(struct udevice **dev) {
     ret = uclass_get_device_by_name(UCLASS_SERIAL,
                                     "serial@30a60000",
                                     dev);
+    ofnode n = dev_ofnode(dev);
 #else
     //TODO: this seems tooo roundabout... looking for a property and
     //from there getting it's enclosing node?! there seems to be no
@@ -47,11 +48,19 @@ int leica_sep_init(struct udevice **dev) {
         return -ENOTTY;
     }
 
+    int module_number = 0;
     int baudrate = 0;
-    ret = ofnode_read_u32(n, "leica,MCU-uart-baudrate", &baudrate);
-    log_debug("%s setting up uart seq_=%i with baudrate=%i\n", __FUNCTION__, (*dev)->seq_, baudrate);
+    if (ofnode_read_u32(n, "leica,MCU-uart-module", &module_number)) {
+        log_err("%s: no module number specified in the device node for the leica_sep uart.\n");
+        return -ENOTTY;
+    }
+    if (ofnode_read_u32(n, "leica,MCU-uart-baudrate", &baudrate)) {
+        log_err("%s: no baudarte property found in the device node for the leica_sep uart.\n");
+        return -ENOTTY;
+    }
+    log_debug("%s setting up uart%i with baudrate=%i\n", __FUNCTION__, module_number, baudrate);
 
-    init_uart_clk((*dev)->seq_);
+    init_uart_clk(module_number);
 
     struct dm_serial_ops *ops = serial_get_ops(*dev);
     if (!ops | !ops->setbrg)

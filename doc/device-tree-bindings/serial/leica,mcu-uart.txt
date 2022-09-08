@@ -1,0 +1,31 @@
+* Leica UART to the MCU
+
+Required properties:
+
+- leica,MCU-uart: marker for common/leica_sep to pickup the uart
+  connected to an onboard MCU, for udevice initialisation and
+  communication
+
+- leica,MCU-uart-module: the $MODULE_NUMBER-1, needed to enable the
+  corresponding clock
+
+- leica,MCU-uart-baudrate: the baudrate to initialize the udevice
+  driver with.
+
+
+Additional requirements:
+
+  the "leica,MCU-uart" marker should be placed only *once* in the
+  devicetree, into the corresponding uartX node.
+
+  Keep in mind to also configure the pull-ups on the uart lines
+  "correctly" in the main devicetree.
+
+
+Example:
+
+	&uart4 {
+		leica,MCU-uart;
+		leica,MCU-uart-module = <3>;
+		leica,MCU-uart-baudrate = <19200>;
+	};

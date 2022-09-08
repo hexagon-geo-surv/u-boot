@@ -1935,10 +1935,10 @@ config CMD_KASLRSEED
 
 config CMD_LEICA_SEP
 	bool "leica SEP query utility"
-	select LEICA_SEP_COMMON
+	select LEICA_SEP
 	help
 	  commandline utility providing a scriptable frontend to the
-	  utility functions in LEICA_SEP_COMMON. which allow to query
+	  utility functions in LEICA_SEP. which allow to query
 	  the MCU over uart for various informations, do configuration
 	  and much more - depending on the implemented/supported set
 	  of commands in its running firmware.

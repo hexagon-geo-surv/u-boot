@@ -118,4 +118,4 @@ obj-$(CONFIG_SCP03) += scp03.o
 
 obj-$(CONFIG_QFW) += qfw.o
 
-obj-$(CONFIG_LEICA_SEP_COMMON) += leica_sep.o
+obj-$(CONFIG_$(SPL_)LEICA_SEP) += leica_sep.o

@@ -987,9 +987,18 @@ config FDT_SIMPLEFB
 	  the presence of the simple frame buffer with associated reserved
 	  memory
 
-config LEICA_SEP_COMMON
-	bool
+menu "Leica Hardware Specific"
+config LEICA_SEP
+	bool "SEP communication functions for u-boot proper"
 	help
 	  Enables utility functions to post SEP commands to a MCU
 	  connected over UART; for example querying the board name/-revision.
 	  the set of supported SEP commands depends on the MCUs firmware.
+
+config SPL_LEICA_SEP
+	bool "SEP communication functionality in SPL"
+	help
+	  Enables utility functions to post SEP commands to a MCU
+	  connected over UART; for example querying the board name/-revision.
+	  the set of supported SEP commands depends on the MCUs firmware.
+endmenu

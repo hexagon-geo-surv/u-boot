@@ -32,6 +32,10 @@
 	u-boot,dm-spl;
 };
 
+&pinctrl_uart4 {
+	u-boot,dm-spl;
+};
+
 &pinctrl_usdhc2_gpio {
 	u-boot,dm-spl;
 };
@@ -69,11 +73,16 @@
 };
 
 &uart4 {
-	// present in SPL
-	//u-boot,dm-spl; // leads to hanging SPL... why?
+	u-boot,dm-spl;
+
 	// marker for common/leica_sep.c to find the device-node by
 	leica,MCU-uart;
+	leica,MCU-uart-module = <3>;
 	leica,MCU-uart-baudrate = <19200>;
+
+        // Note: dma properties interfere with SPL startup if two uart modules are enabled
+	/delete-property/ dmas;
+	/delete-property/ dma-names;
 };
 
 &crypto {
