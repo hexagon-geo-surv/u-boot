@@ -81,9 +81,11 @@
 #define CONFIG_BOOTCOMMAND \
 	"mmc dev ${mmcdev}; "\
 	"if mmc rescan; then " \
-		"if run loadbootscript && run bootscript; then " \
-			"echo Bootscript finished; " \
-		"fi; " \
+		"mmc dev 2;" \
+		"mmc read ${initrd_addr} 0 19b7b;" \
+		"env set bootargs console=${console} loglevel=8;" \
+		"gpio set GPIO1_10;" \
+		"bootm ${initrd_addr}#imx8mm-hgs-gs05-rev-c.dtb; " \
 	"fi;"
 #else
 #define CONFIG_BOOTCOMMAND \
